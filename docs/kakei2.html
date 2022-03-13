@@ -1,0 +1,154 @@
+---
+title: "家計消費構造実態調査結果"
+subtitle: "可処分所得と消費支出の関係"
+author: "T.Naono"
+date: "2022-02-28"
+output:
+  html_document:
+    highlight: textmate
+    theme: united
+    toc: true
+    smart: false
+    css: my-markdown.css
+  pdf_document:
+    latex_engine: lualatex
+    toc: false
+    number_sections: true
+header-includes:
+  - \usepackage{indentfirst}
+  - \parindent = 1em
+  - \usepackage{dcolumn}
+  - \newcolumntype{.}{D{.}{.}{-1}}
+  - \usepackage{caption}
+  - \captionsetup[table]{name=表}
+  - \captionsetup[figure]{name=図}
+  - \usepackage{hyperref}
+documentclass: bxjsarticle
+classoption: 10pt,a4paper,lualatex,ja=standard
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="回帰分析" class="section level2">
+<h2>1.回帰分析</h2>
+<p>前回の記事では、基本統計量や散布図を使用してデータセットの特徴を把握しました。次は、消費関数<span class="math inline">\(y=ax+b\)</span>のパラメータ（<span class="math inline">\(a\)</span>と<span class="math inline">\(b\)</span>）を推定し、消費関数を決定します。</p>
+<p>とはいえ、<span class="math inline">\(y=ax+b\)</span>という式がそのまま現実の経済に当てはまることはなく、必ず誤差が含まれます。このため、誤差を加えた消費関数は</p>
+<p>消費<span class="math inline">\(=a+b\)</span>所得<span class="math inline">\(+\)</span>誤差
+<span class="math inline">\(y=a+bx+μ\)</span></p>
+<p>となります。
+この式によって、消費額を、法則性によって説明できる部分と誤差の部分に分けることができます。</p>
+<p>次に、パラメータの推定を、先ほど描いた散布図との関係で考えてみます。</p>
+<p>パラメータの推定とは、散布図にプロットした個々のデータの間に一本の直線を引くことを意味しています。直線を引くことを回帰分析（regression analysis）といい、引かれた直線を回帰直線といいます。</p>
+<p>散布図の中で、回帰直線が<span class="math inline">\(y\)</span>軸と交わる点（切片）がパラメータ<span class="math inline">\(a\)</span>、直線の傾きがパラメータ<span class="math inline">\(b\)</span>になります。
+回帰分析が、パラメータの推定に最もよく使われる手法です。</p>
+<p>それでは、どのような直線を引けばよいのでしょうか。</p>
+<p>当然、データセットの内容（ここでは所得と消費の関係）を的確に表す直線が望ましいということになります。なぜなら、データは現実の経済を表していますから、当てはまりがよい直線ほど、現実の経済のメカニズムを的確に反映しているといえるからです。</p>
+<p>「データセットの内容を的確に表す」ための一つの方法として、「それぞれのデータに最も近くなるように」直線を引く、という方法が考えられます。
+なぜなら、回帰直線からそれぞれのデータまでの距離は、推定値と実現値の差、つまり誤差ですから、「それぞれのデータに最も近くなるように」直線を引くと、データセットとの誤差が最も小さくなります。</p>
+<p>このように、誤差を最小にする推定方法を最小二乗法（Least Square Method）といいます。</p>
+<p>回帰分析では、この最小二乗法が最もよく用いられます。最小二乗法は、ExcelやRなど、どの統計ソフトでも実行できます。</p>
+<p>下の表は、Rで回帰分析を実行した結果を表したものです。</p>
+<p>勤労者世帯</p>
+<pre><code>## 
+## Call:
+## lm(formula = expenditure ~ income, data = myd_w)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -27363  -4291    -34   5456  29309 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.225e+05  2.299e+04   5.330 3.04e-06 ***
+## income      3.375e-01  6.253e-02   5.397 2.43e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 10230 on 45 degrees of freedom
+## Multiple R-squared:  0.393,  Adjusted R-squared:  0.3795 
+## F-statistic: 29.13 on 1 and 45 DF,  p-value: 2.427e-06</code></pre>
+<p>無職世帯</p>
+<pre><code>## 
+## Call:
+## lm(formula = expenditure ~ income, data = myd_u)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -27259  -8888  -1028   9429  26670 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.004e+05  1.494e+04   6.719 2.66e-08 ***
+## income      4.613e-01  6.801e-02   6.782 2.14e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 13380 on 45 degrees of freedom
+## Multiple R-squared:  0.5055, Adjusted R-squared:  0.4945 
+## F-statistic:    46 on 1 and 45 DF,  p-value: 2.143e-08</code></pre>
+<p>勤労者世帯と無職世帯の計</p>
+<pre><code>## 
+## Call:
+## lm(formula = expenditure ~ income, data = myd)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -32920  -6946   -118   7940  35697 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.310e+05  4.815e+03   27.21   &lt;2e-16 ***
+## income      3.167e-01  1.590e-02   19.92   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 12180 on 92 degrees of freedom
+## Multiple R-squared:  0.8117, Adjusted R-squared:  0.8097 
+## F-statistic: 396.7 on 1 and 92 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>これらの表では、推定されたパラメータは、出力結果の3段目、<code>Coefficients:</code>の<code>Estimate</code>の欄に示されています。<code>(Intercept)</code>の値がパラメータ<span class="math inline">\(a\)</span>、<code>income</code>の値がパラメータ<span class="math inline">\(b\)</span>です。また、切片の値は基礎消費を、<span class="math inline">\(x\)</span>の係数は限界消費性向を表します。</p>
+<p>これをまとめると、次のようになります。</p>
+<ul>
+<li>勤労者世帯
+<ul>
+<li>切片：<span class="math inline">\(122500\)</span>円</li>
+<li>消費性向：<span class="math inline">\(0.3375\)</span></li>
+</ul></li>
+<li>無職世帯
+<ul>
+<li>切片：<span class="math inline">\(100400\)</span>円</li>
+<li>消費性向：<span class="math inline">\(0.4613\)</span></li>
+</ul></li>
+<li>勤労者世帯と無職世帯の計
+<ul>
+<li>切片：<span class="math inline">\(131000\)</span>円</li>
+<li>消費性向：<span class="math inline">\(0.3167\)</span></li>
+</ul></li>
+</ul>
+<div id="決定係数" class="section level3">
+<h3>決定係数</h3>
+<p>先ほど、それぞれのデータに最も近くなるように引くと説明しました。</p>
+<p>データに近い回帰直線がひかれていることを、推定の当てはまりがいいといいます。当てはまりがいいか否かは、通常、決定係数で判断されます。</p>
+<p>決定係数は通常<span class="math inline">\(R^2\)</span>として表され、<span class="math inline">\(0\)</span>から<span class="math inline">\(1\)</span>までの値をとります。<span class="math inline">\(y\)</span>の変動のどれくらいを<span class="math inline">\(x\)</span>で説明できるか、ここでは消費支出の変動のどれくらいを可処分所得で示すことができるかを表しています。</p>
+<p>先ほどの出力結果では、決定係数は<code>Multiple R-squared</code>と<code>Adjusted R-squared</code>の2つが出力されています。日本語では通常「決定係数」、「自由度修正済決定係数」と呼ばれています。単回帰分析の場合は<code>Multiple R-squared</code>を使用します。</p>
+<ul>
+<li><p>勤労者世帯:<span class="math inline">\(0.393\)</span></p></li>
+<li><p>無職世帯:<span class="math inline">\(0.5055\)</span></p></li>
+<li><p>勤労者世帯＋無職世帯:<span class="math inline">\(0.8117\)</span></p></li>
+</ul>
+<p>これらの値は、消費の変動が、勤労者世帯では<span class="math inline">\(39.3\)</span>%、無職世帯では<span class="math inline">\(50.55\)</span>%、全世帯では<span class="math inline">\(81.17\)</span>%を説明できることを表します。</p>
+<p>また、上で説明したように、分析の元になるデータには誤差が含まれています。したがって、パラメータの推定値にも誤差が含まれています。</p>
+<p>誤差の大きさを示す値を標準誤差（Standard Error）といいます。標準誤差はパラメータの精度に関係しますので、標準誤差の値に注目する必要があります。</p>
+<p>散布図にこれらのパラメータの推定値を使った回帰直線を引くと、下の図のようになります。
+<img src="/post/kakei2_files/figure-html/sampuz_kaiki-1.png" width="480" /></p>
+<p>この推定結果を式で表すと、以下のようになります。推定した消費関数には、パラメータの下に括弧をつけて標準誤差を示し、さらに決定係数やサンプルサイズを補記することが一般的です。</p>
+<p>勤労者世帯
+<span class="math display">\[y=122500+0.3375x+μ\]</span></p>
+<p>無職世帯
+<span class="math display">\[y=100400+0.4613+μ\]</span></p>
+<p>勤労者世帯と無職世帯の計
+<span class="math display">\[y=131000+0.3167+μ\]</span></p>
+<!-- 回帰分析を行い、消費額と所得というデータからパラメータ（aとb）を推定することで、消費関数が決定します。 -->
+<!-- このように、回帰分析を行って実際に推定された値を推定値といいます。 -->
+</div>
+</div>
