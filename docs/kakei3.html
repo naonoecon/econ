@@ -492,136 +492,30 @@ pre code {
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#回帰分析">1.回帰分析</a>
-<ul>
-<li><a href="#決定係数">決定係数</a></li>
-</ul></li>
-</ul>
-</div>
 
-<div id="回帰分析" class="section level2">
-<h2>1.回帰分析</h2>
-<p>前回の記事では、基本統計量や散布図を使用してデータセットの特徴を把握しました。次は、消費関数<span class="math inline">\(y=ax+b\)</span>のパラメータ（<span class="math inline">\(a\)</span>と<span class="math inline">\(b\)</span>）を推定し、消費関数を決定します。</p>
-<p>とはいえ、<span class="math inline">\(y=ax+b\)</span>という式がそのまま現実の経済に当てはまることはなく、必ず誤差が含まれます。このため、誤差を加えた消費関数は</p>
-<p>消費<span class="math inline">\(=a+b\)</span>所得<span class="math inline">\(+\)</span>誤差 <span class="math inline">\(y=a+bx+μ\)</span></p>
-<p>となります。
-この式によって、消費額を、法則性によって説明できる部分と誤差の部分に分けることができます。</p>
-<p>次に、パラメータの推定を、先ほど描いた散布図との関係で考えてみます。</p>
-<p>パラメータの推定とは、散布図にプロットした個々のデータの間に一本の直線を引くことを意味しています。直線を引くことを回帰分析（regression
-analysis）といい、引かれた直線を回帰直線といいます。</p>
-<p>散布図の中で、回帰直線が<span class="math inline">\(y\)</span>軸と交わる点（切片）がパラメータ<span class="math inline">\(a\)</span>、直線の傾きがパラメータ<span class="math inline">\(b\)</span>になります。
-回帰分析が、パラメータの推定に最もよく使われる手法です。</p>
-<p>それでは、どのような直線を引けばよいのでしょうか。</p>
-<p>当然、データセットの内容（ここでは所得と消費の関係）を的確に表す直線が望ましいということになります。なぜなら、データは現実の経済を表していますから、当てはまりがよい直線ほど、現実の経済のメカニズムを的確に反映しているといえるからです。</p>
-<p>「データセットの内容を的確に表す」ための一つの方法として、「それぞれのデータに最も近くなるように」直線を引く、という方法が考えられます。
-なぜなら、回帰直線からそれぞれのデータまでの距離は、推定値と実現値の差、つまり誤差ですから、「それぞれのデータに最も近くなるように」直線を引くと、データセットとの誤差が最も小さくなります。</p>
-<p>このように、誤差を最小にする推定方法を最小二乗法（Least Square
-Method）といいます。</p>
-<p>回帰分析では、この最小二乗法が最もよく用いられます。最小二乗法は、ExcelやRなど、どの統計ソフトでも実行できます。</p>
-<p>下の表は、Rで回帰分析を実行した結果を表したものです。</p>
-<p>勤労者世帯</p>
-<pre><code>## 
-## Call:
-## lm(formula = expenditure ~ income, data = myd_w)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -27363  -4291    -34   5456  29309 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 1.225e+05  2.299e+04   5.330 3.04e-06 ***
-## income      3.375e-01  6.253e-02   5.397 2.43e-06 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 10230 on 45 degrees of freedom
-## Multiple R-squared:  0.393,  Adjusted R-squared:  0.3795 
-## F-statistic: 29.13 on 1 and 45 DF,  p-value: 2.427e-06</code></pre>
-<p>無職世帯</p>
-<pre><code>## 
-## Call:
-## lm(formula = expenditure ~ income, data = myd_u)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -27259  -8888  -1028   9429  26670 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 1.004e+05  1.494e+04   6.719 2.66e-08 ***
-## income      4.613e-01  6.801e-02   6.782 2.14e-08 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 13380 on 45 degrees of freedom
-## Multiple R-squared:  0.5055, Adjusted R-squared:  0.4945 
-## F-statistic:    46 on 1 and 45 DF,  p-value: 2.143e-08</code></pre>
-<p>勤労者世帯と無職世帯の計</p>
-<pre><code>## 
-## Call:
-## lm(formula = expenditure ~ income, data = myd)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -32920  -6946   -118   7940  35697 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 1.310e+05  4.815e+03   27.21   &lt;2e-16 ***
-## income      3.167e-01  1.590e-02   19.92   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 12180 on 92 degrees of freedom
-## Multiple R-squared:  0.8117, Adjusted R-squared:  0.8097 
-## F-statistic: 396.7 on 1 and 92 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>これらの表では、推定されたパラメータは、出力結果の3段目、<code>Coefficients:</code>の<code>Estimate</code>の欄に示されています。<code>(Intercept)</code>の値がパラメータ<span class="math inline">\(a\)</span>、<code>income</code>の値がパラメータ<span class="math inline">\(b\)</span>です。また、切片の値は基礎消費を、<span class="math inline">\(x\)</span>の係数は限界消費性向を表します。</p>
-<p>これをまとめると、次のようになります。</p>
-<ul>
-<li>勤労者世帯
-<ul>
-<li>切片：<span class="math inline">\(122500\)</span>円</li>
-<li>消費性向：<span class="math inline">\(0.3375\)</span></li>
-</ul></li>
-<li>無職世帯
-<ul>
-<li>切片：<span class="math inline">\(100400\)</span>円</li>
-<li>消費性向：<span class="math inline">\(0.4613\)</span></li>
-</ul></li>
-<li>勤労者世帯と無職世帯の計
-<ul>
-<li>切片：<span class="math inline">\(131000\)</span>円</li>
-<li>消費性向：<span class="math inline">\(0.3167\)</span></li>
-</ul></li>
-</ul>
-<div id="決定係数" class="section level3">
-<h3>決定係数</h3>
-<p>先ほど、それぞれのデータに最も近くなるように引くと説明しました。</p>
-<p>データに近い回帰直線がひかれていることを、推定の当てはまりがいいといいます。当てはまりがいいか否かは、通常、決定係数で判断されます。</p>
-<p>決定係数は通常<span class="math inline">\(R^2\)</span>として表され、<span class="math inline">\(0\)</span>から<span class="math inline">\(1\)</span>までの値をとります。<span class="math inline">\(y\)</span>の変動のどれくらいを<span class="math inline">\(x\)</span>で説明できるか、ここでは消費支出の変動のどれくらいを可処分所得で示すことができるかを表しています。</p>
-<p>先ほどの出力結果では、決定係数は<code>Multiple R-squared</code>と<code>Adjusted R-squared</code>の2つが出力されています。日本語では通常「決定係数」、「自由度修正済決定係数」と呼ばれています。単回帰分析の場合は<code>Multiple R-squared</code>を使用します。</p>
-<ul>
-<li><p>勤労者世帯:<span class="math inline">\(0.393\)</span></p></li>
-<li><p>無職世帯:<span class="math inline">\(0.5055\)</span></p></li>
-<li><p>勤労者世帯＋無職世帯:<span class="math inline">\(0.8117\)</span></p></li>
-</ul>
-<p>これらの値は、消費の変動が、勤労者世帯では<span class="math inline">\(39.3\)</span>%、無職世帯では<span class="math inline">\(50.55\)</span>%、全世帯では<span class="math inline">\(81.17\)</span>%を説明できることを表します。</p>
-<p>また、上で説明したように、分析の元になるデータには誤差が含まれています。したがって、パラメータの推定値にも誤差が含まれています。</p>
-<p>誤差の大きさを示す値を標準誤差（Standard
-Error）といいます。標準誤差はパラメータの精度に関係しますので、標準誤差の値に注目する必要があります。</p>
-<p>散布図にこれらのパラメータの推定値を使った回帰直線を引くと、下の図のようになります。
-<img src="data:image/png;base64,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" width="480" /></p>
-<p>この推定結果を式で表すと、以下のようになります。推定した消費関数には、パラメータの下に括弧をつけて標準誤差を示し、さらに決定係数やサンプルサイズを補記することが一般的です。</p>
-<p>勤労者世帯 <span class="math display">\[y=122500+0.3375x+μ\]</span></p>
-<p>無職世帯 <span class="math display">\[y=100400+0.4613+μ\]</span></p>
-<p>勤労者世帯と無職世帯の計 <span class="math display">\[y=131000+0.3167+μ\]</span></p>
-<!-- 回帰分析を行い、消費額と所得というデータからパラメータ（aとb）を推定することで、消費関数が決定します。 -->
-<!-- このように、回帰分析を行って実際に推定された値を推定値といいます。 -->
-</div>
-</div>
+<p>前回の記事で、計量経済学の主な目的はパラメータの推定であると述べました。</p>
+<p>パラメータを推定する際には、推定値の大きさだけでなく、推定値の誤差（標準誤差）の大きさにも注目します。というのも、推定値を求めても、その誤差が大きいと、推定結果が疑わしいからです。</p>
+<p>標準誤差で注目すべき点は、誤差が、推定値の符号条件が変わるほど大きいかどうかという点です。</p>
+<p>たとえば、消費関数のパラメータ<span class="math inline">\(b\)</span>を求め、これがプラスの値であったとしても、推定誤差が大きければゼロにもマイナスにもなりうるので、所得が消費に与える影響を測ることはできません。</p>
+<p>特に、パラメータ<span class="math inline">\(b\)</span>がゼロであれば、所得は消費を説明する要因とはみなせなくなります。<strong>符号条件について補足すること</strong></p>
+<p>そこで、推定値と標準誤差を求めた後は、必ず、パラメータの推定値がゼロかどうかについての仮説検定を実施します。</p>
+<p>仮説検定とは、ステップ１で考えた理論的背景（「所得の一定割合が消費に回る」）が統計学的に正しいかどうか検証することをいいます。
+（ヤマタクp76～p78）</p>
+<p>仮説検定では、<span class="math inline">\(t\)</span>値に注目します。</p>
+<p><span class="math inline">\(t\)</span>値はパラメータを標準誤差で割った値で、値が大きいほど標準誤差が小さいことを示します。正確には<span class="math inline">\(t\)</span>分布表をもとにサンプルサイズや説明変数の値から判断しますが、多くの場合、<span class="math inline">\(t\)</span>値が絶対値で<span class="math inline">\(2\)</span>に近いか、<span class="math inline">\(2\)</span>よりも大きな値であれば、推定値の誤差はパラメータの符号条件を変えるほど大きくなく、パラメータがゼロである可能性は低いと判断され、パラメータがゼロであるという帰無仮説は棄却されます。</p>
+<p>このとき、推定値は「統計学的に有意である（statistically
+significant）」といいます。</p>
+<p>なぜ<span class="math inline">\(t\)</span>値が<span class="math inline">\(2\)</span>に近い値よりも大きければ統計的に有意なパラメータ推定値であると判断できるかは、別の機会に詳しく説明します。</p>
+<p>また、同様のことは有意水準（significance level）あるいは<span class="math inline">\(p\)</span>値でも確認できます。<span class="math inline">\(p\)</span>値は、直感的にいうと、パラメータの推定値がゼロである確率を示したものです。</p>
+<p>たとえば、<span class="math inline">\(p\)</span>値が<span class="math inline">\(0.01\)</span>であれば、推定値がゼロである確率は<span class="math inline">\(1\)</span>%となり、非常に小さいと判断できます。計量経済分析では、<span class="math inline">\(p\)</span>値が<span class="math inline">\(0.05\)</span>未満や<span class="math inline">\(0.10\)</span>未満など、十分に小さいときに「統計的に有意である」とみなします。</p>
+<p>消費関数の例では、パラメータ<span class="math inline">\(a\)</span>の<span class="math inline">\(t\)</span>値は○○、パラメータbの<span class="math inline">\(t\)</span>値は○○とどちらも<span class="math inline">\(2\)</span>より大きく、また<span class="math inline">\(p\)</span>値も<span class="math inline">\(0\)</span>に近いため「統計学的に有意である」と判断できます。つまり、パラメータ<span class="math inline">\(a\)</span>も<span class="math inline">\(b\)</span>もプラスであり、推定誤差によってゼロになる可能性は非常に低いとみなせます。</p>
+<p>なお、前回の記事の最後に、推定結果を式や表で示すときはパラメータ推定値の下に括弧をつけて標準誤差を掲載することが一般的と述べました。その場合、<span class="math inline">\(t\)</span>値はパラメータを標準誤差で除すことで簡単に求めることができます。</p>
+<p>また、括弧内に標準誤差でなく<span class="math inline">\(t\)</span>値を掲載する場合や、<span class="math inline">\(t\)</span>値と<span class="math inline">\(p\)</span>値の両方を掲載する場合もあります。いずれの場合も、脚注等に標準誤差、<span class="math inline">\(t\)</span>値、<span class="math inline">\(p\)</span>値のどれを載せているか示されているので、推定結果を見る際にはその点に注目する必要があります。</p>
+<p>また、経済事象においては、一つの変数が一つの要因だけで決定されるとは限りません。例えば、ある家計の食費は、その家計の所得だけでなく、家族の人数にも影響されるかもしれません。その場合、食費が所得だけで決まると考えたり、構成人数だけで決まると考えたりしていては、どちらも必要な説明要因を省いていることになり、正しい分析は行えません。</p>
+<p>このように、説明変数が複数ある場合の回帰分析を重回帰分析（Multiple
+Regression Analysis）といいます。</p>
+<p>これまで説明してきた消費関数の例は説明変数が一つ（可処分所得）の単回帰分析でしたが、通常は、被説明変数に影響を与えうる要因は複数あると考えられますから、重回帰分析が行われます。説明変数一つ一つの<span class="math inline">\(t\)</span>値や<span class="math inline">\(p\)</span>値をみて、それが統計学的に有意であれば、その変数は被説明変数に影響を与えていると判断し、<span class="math inline">\(t\)</span>値や<span class="math inline">\(p\)</span>値が有意でなければその変数は影響を与えていないと判断します。したがって、仮説検定を行えば、被説明変数に影響を与える要因を特定することができます。</p>
+<p>point　t値やp値をもとに、パラメータがゼロかどうか、すなわち、統計的に有意かどうかを検定し、要因の特定化を図る</p>
 
 
 
