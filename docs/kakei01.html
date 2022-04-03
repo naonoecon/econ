@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>計量経済分析の流れ</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="site_style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My ウェブサイト</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">ホーム</a>
+</li>
+<li>
+  <a href="graph.html">グラフ</a>
+</li>
+<li>
+  <a href="kakei01.html">エコノメ</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">計量経済分析の流れ</h1>
+
+</div>
+
+
+<p>計量経済分析の流れを整理してみました。</p>
+<div id="仮説の設定" class="section level2">
+<h2>1.仮説の設定</h2>
+<p>計量経済学とは一言でいうと、計量経済学とは、経済理論で得られた関係が現実経済に合うかどうかを調べる（実証する）学問です。
+計量経済分析は、必ず、経済理論や何らかの仮説を検証するために行われます。手元にあるデータを闇雲に分析するというやり方は、分析ソフトの使い方を覚えるためには役立つでしょうが、これは計量経済分析とはいえないでしょう。</p>
+<p>マクロ経済学の教科書では「所得の一定割合が消費に回る」という説明があると思います。今回は、この経済理論（仮説）が現在の日本経済で当てはまるかどうか、検証してみることにします。データは、総務省「2019年全国家計構造調査」の結果を使用します。</p>
+</div>
+<div id="記述統計" class="section level2">
+<h2>2.記述統計</h2>
+<p>データセットの中身は、次のようになっています。これは、都道府県別の調査結果から、可処分所得と消費支出を抜き出したものです。項目名householdは世帯の類型を表しています。workerは勤労者世帯、unemploymentは無職世帯です。areaは都道府県名です。expenditureは消費支出の額、incomeは可処分所得の額を表します。</p>
+<pre class="r"><code>tibble(myd)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["household"],"name":[1],"type":["chr"],"align":["left"]},{"label":["area"],"name":[2],"type":["chr"],"align":["left"]},{"label":["expenditure"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["income"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"worker","2":"hokkaido","3":"230996","4":"321287"},{"1":"worker","2":"aomori","3":"237171","4":"348429"},{"1":"worker","2":"iwate","3":"259455","4":"389320"},{"1":"worker","2":"miyagi","3":"250386","4":"364428"},{"1":"worker","2":"akita","3":"250228","4":"390656"},{"1":"worker","2":"yamagata","3":"282620","4":"387565"},{"1":"worker","2":"fukushima","3":"252853","4":"369305"},{"1":"worker","2":"ibaraki","3":"274361","4":"404355"},{"1":"worker","2":"tochigi","3":"251817","4":"383239"},{"1":"worker","2":"gunma","3":"233726","4":"337318"},{"1":"worker","2":"saitama","3":"242751","4":"392428"},{"1":"worker","2":"chiba","3":"249708","4":"394981"},{"1":"worker","2":"tokyo","3":"244541","4":"380230"},{"1":"worker","2":"kanagawa","3":"256762","4":"394329"},{"1":"worker","2":"niigata","3":"234044","4":"376205"},{"1":"worker","2":"toyama","3":"253513","4":"398169"},{"1":"worker","2":"ishikawa","3":"243282","4":"368363"},{"1":"worker","2":"fukui","3":"229609","4":"398413"},{"1":"worker","2":"yamanashi","3":"254752","4":"372504"},{"1":"worker","2":"nagano","3":"265353","4":"382448"},{"1":"worker","2":"gifu","3":"240755","4":"390835"},{"1":"worker","2":"shizuoka","3":"245819","4":"380916"},{"1":"worker","2":"aichi","3":"254427","4":"374986"},{"1":"worker","2":"mie","3":"238547","4":"374661"},{"1":"worker","2":"shiga","3":"239823","4":"381107"},{"1":"worker","2":"kyoto","3":"251369","4":"367915"},{"1":"worker","2":"osaka","3":"238955","4":"358232"},{"1":"worker","2":"hyogo","3":"249289","4":"365793"},{"1":"worker","2":"nara","3":"269795","4":"385748"},{"1":"worker","2":"wakayama","3":"217433","4":"350489"},{"1":"worker","2":"tottori","3":"251146","4":"364142"},{"1":"worker","2":"shimane","3":"249967","4":"378335"},{"1":"worker","2":"okayama","3":"239478","4":"355913"},{"1":"worker","2":"hiroshima","3":"245765","4":"351762"},{"1":"worker","2":"yamaguchi","3":"242792","4":"363174"},{"1":"worker","2":"tokushima","3":"259936","4":"365985"},{"1":"worker","2":"kagawa","3":"263754","4":"390032"},{"1":"worker","2":"ehime","3":"230356","4":"348768"},{"1":"worker","2":"kochi","3":"236168","4":"337464"},{"1":"worker","2":"fukuoka","3":"242998","4":"339260"},{"1":"worker","2":"saga","3":"253317","4":"356669"},{"1":"worker","2":"nagasaki","3":"251850","4":"373301"},{"1":"worker","2":"kumamoto","3":"242120","4":"350194"},{"1":"worker","2":"oita","3":"233656","4":"338313"},{"1":"worker","2":"miyazaki","3":"231381","4":"331765"},{"1":"worker","2":"kagoshima","3":"236814","4":"325516"},{"1":"worker","2":"okinawa","3":"221049","4":"285644"},{"1":"unemployed","2":"hokkaido","3":"184889","4":"179437"},{"1":"unemployed","2":"aomori","3":"203637","4":"214718"},{"1":"unemployed","2":"iwate","3":"191449","4":"244305"},{"1":"unemployed","2":"miyagi","3":"215416","4":"238623"},{"1":"unemployed","2":"akita","3":"195329","4":"234116"},{"1":"unemployed","2":"yamagata","3":"253541","4":"274155"},{"1":"unemployed","2":"fukushima","3":"215922","4":"233480"},{"1":"unemployed","2":"ibaraki","3":"212478","4":"229126"},{"1":"unemployed","2":"tochigi","3":"203655","4":"213229"},{"1":"unemployed","2":"gunma","3":"190438","4":"209602"},{"1":"unemployed","2":"saitama","3":"213712","4":"221132"},{"1":"unemployed","2":"chiba","3":"215939","4":"221868"},{"1":"unemployed","2":"tokyo","3":"212244","4":"205606"},{"1":"unemployed","2":"kanagawa","3":"211519","4":"201477"},{"1":"unemployed","2":"niigata","3":"220309","4":"256188"},{"1":"unemployed","2":"toyama","3":"239784","4":"316498"},{"1":"unemployed","2":"ishikawa","3":"209032","4":"239503"},{"1":"unemployed","2":"fukui","3":"194265","4":"262564"},{"1":"unemployed","2":"yamanashi","3":"204883","4":"201552"},{"1":"unemployed","2":"nagano","3":"195156","4":"237141"},{"1":"unemployed","2":"gifu","3":"212367","4":"251573"},{"1":"unemployed","2":"shizuoka","3":"206754","4":"233390"},{"1":"unemployed","2":"aichi","3":"202231","4":"207581"},{"1":"unemployed","2":"mie","3":"191032","4":"221379"},{"1":"unemployed","2":"shiga","3":"236268","4":"245585"},{"1":"unemployed","2":"kyoto","3":"182624","4":"180467"},{"1":"unemployed","2":"osaka","3":"202463","4":"175650"},{"1":"unemployed","2":"hyogo","3":"219451","4":"205943"},{"1":"unemployed","2":"nara","3":"202376","4":"202277"},{"1":"unemployed","2":"wakayama","3":"183151","4":"199163"},{"1":"unemployed","2":"tottori","3":"191939","4":"234196"},{"1":"unemployed","2":"shimane","3":"209825","4":"252493"},{"1":"unemployed","2":"okayama","3":"213830","4":"223075"},{"1":"unemployed","2":"hiroshima","3":"217422","4":"227634"},{"1":"unemployed","2":"yamaguchi","3":"183070","4":"202582"},{"1":"unemployed","2":"tokushima","3":"189509","4":"196883"},{"1":"unemployed","2":"kagawa","3":"203328","4":"220684"},{"1":"unemployed","2":"ehime","3":"176392","4":"183478"},{"1":"unemployed","2":"kochi","3":"174804","4":"187310"},{"1":"unemployed","2":"fukuoka","3":"190364","4":"174063"},{"1":"unemployed","2":"saga","3":"209208","4":"215941"},{"1":"unemployed","2":"nagasaki","3":"178183","4":"201571"},{"1":"unemployed","2":"kumamoto","3":"191136","4":"212447"},{"1":"unemployed","2":"oita","3":"189379","4":"207251"},{"1":"unemployed","2":"miyazaki","3":"183356","4":"185705"},{"1":"unemployed","2":"kagoshima","3":"166388","4":"187799"},{"1":"unemployed","2":"okinawa","3":"150907","4":"166737"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div id="基本統計量" class="section level3">
+<h3>基本統計量</h3>
+<p>分析に当たっては、使用するデータの特徴を把握することが何より重要です。このため、データを用意したら、初めに基本統計量を求めます。</p>
+<p>基本統計量とは、データの基本的な特徴を表す値のことで、代表値と散布度に区分できます。</p>
+<p>代表値とはデータを代表する値のことで、平均値、最大値、最小値などがあります。散布度とはデータの散らばり度合いを表す値のことで、分散、標準偏差などがあります。</p>
+<p>・代表値（そのデータ全体を表す値）：最小値、最大値、中央値、最頻値、平均値</p>
+<p>・散布度（データの散らばりを表す値）：範囲、分散、標準偏差、歪度、尖度</p>
+<p>今回取得したデータセットの基本統計量は、次のようになっています。</p>
+<ul>
+<li>可処分所得の基本統計量</li>
+</ul>
+<pre class="r"><code>summary(myd$income)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  166737  215024  301071  292320  369070  404355</code></pre>
+<ul>
+<li>消費支出の基本統計量</li>
+</ul>
+<pre class="r"><code>summary(myd$expenditure)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  150907  202679  229983  223596  245806  282620</code></pre>
+<p>このままでは見づらいので、<code>knitr::kable</code>で表示します。</p>
+<pre class="r"><code>kable(summary(myd))</code></pre>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="25%" />
+<col width="25%" />
+<col width="22%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">household</th>
+<th align="left">area</th>
+<th align="left">expenditure</th>
+<th align="left">income</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">Length:94</td>
+<td align="left">Length:94</td>
+<td align="left">Min. :150907</td>
+<td align="left">Min. :166737</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Class :character</td>
+<td align="left">Class :character</td>
+<td align="left">1st Qu.:202679</td>
+<td align="left">1st Qu.:215024</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">Mode :character</td>
+<td align="left">Mode :character</td>
+<td align="left">Median :229983</td>
+<td align="left">Median :301071</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">Mean :223596</td>
+<td align="left">Mean :292320</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3rd Qu.:245806</td>
+<td align="left">3rd Qu.:369070</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">Max. :282620</td>
+<td align="left">Max. :404355</td>
+</tr>
+</tbody>
+</table>
+<p>なお、出力結果の各項目は、それぞれ次のことを表しています。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">項目</th>
+<th align="center">意味</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Min.</td>
+<td align="center">最小値</td>
+</tr>
+<tr class="even">
+<td align="center">1st. Qu.</td>
+<td align="center">第一四分位</td>
+</tr>
+<tr class="odd">
+<td align="center">Median</td>
+<td align="center">中央値</td>
+</tr>
+<tr class="even">
+<td align="center">Mean</td>
+<td align="center">平均値</td>
+</tr>
+<tr class="odd">
+<td align="center">3rd Qu.</td>
+<td align="center">第三四分位</td>
+</tr>
+<tr class="even">
+<td align="center">Max.</td>
+<td align="center">最大値</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="分散標準偏差" class="section level3">
+<h3>分散、標準偏差</h3>
+<p>次に、分散と標準偏差を求め、データのばらつき具合を確認します。</p>
+<p>分散は<code>var</code>、標準偏差は<code>sd</code>で求められます。</p>
+<ul>
+<li>可処分所得</li>
+</ul>
+<pre class="r"><code>var(myd$income)</code></pre>
+<pre><code>## [1] 6315016862</code></pre>
+<pre class="r"><code>sd(myd$income)</code></pre>
+<pre><code>## [1] 79467.08</code></pre>
+<ul>
+<li>消費支出</li>
+</ul>
+<pre class="r"><code>var(myd$expenditure)</code></pre>
+<pre><code>## [1] 780184845</code></pre>
+<pre class="r"><code>sd(myd$expenditure)</code></pre>
+<pre><code>## [1] 27931.79</code></pre>
+<p>これを見ると、消費支出、可処分所得とも、ばらつきが大きくないことが確認できます。</p>
+</div>
+<div id="散布図" class="section level3">
+<h3>散布図</h3>
+<p>次に、散布図を描いて、2変数の関係を把握します。同時に、外れ値があるかどうかも確認します。</p>
+<p>下の散布図は、可処分所得（説明変数）を<span
+class="math inline">\(x\)</span>軸に、消費支出（被説明変数）を<span
+class="math inline">\(y\)</span>軸にとったものです。</p>
+<div class="figure">
+<img src="kakei01_files/figure-html/sampu01-1.png" alt="可処分所得と消費支出の関係" width="480" />
+<p class="caption">
+可処分所得と消費支出の関係
+</p>
+</div>
+<p>この図からは、明確に外れ値と言えるようなデータは確認できません。</p>
+<p>外れ値が発生する原因は、データの入力誤りであったり、実際に特異な現象が発生していたりすることです。データセットに外れ値が含まれている場合は、外れ値を除いて分析を行ったり、外れ値があることを考慮してダミー変数を使って分析を行ったりします。</p>
+</div>
+<div id="相関係数" class="section level3">
+<h3>相関係数</h3>
+<p>また、上の散布図では、データの配置は右上がりになっています。このことから、可処分所得が多い（<span
+class="math inline">\(x\)</span>軸の値が大きい）ほど消費支出が多い（<span
+class="math inline">\(y\)</span>軸の値が大きい）という関係があることがわかります。したがって、可処分所得と消費支出の間には正の相関があるといえます。</p>
+<p>今回のデータセットの相関係数は</p>
+<pre class="r"><code>cor(myd$income, myd$expenditure)</code></pre>
+<pre><code>## [1] 0.9009665</code></pre>
+<p>約<span
+class="math inline">\(0.90\)</span>であり、はっきりとした正の相関が見られます。</p>
+<p>なお、データの配置が右下がりの場合は、<span
+class="math inline">\(x\)</span>軸の値が大きいほど<span
+class="math inline">\(y\)</span>軸の値が小さいという関係にあります。このとき、両者には負の相関があるといいます。右上がりでも右下がりでもない場合は、両者には相関がないといいます。</p>
+</div>
+<div id="ヒストグラム" class="section level3">
+<h3>ヒストグラム</h3>
+<p>ヒストグラムでデータの分布を把握することも重要です。</p>
+<p>消費支出と可処分所得、それぞれのヒストグラムを描くと、次のようになります。</p>
+<div class="figure">
+<img src="kakei01_files/figure-html/hist01-1.png" alt="可処分所得のヒストグラム" width="480" />
+<p class="caption">
+可処分所得のヒストグラム
+</p>
+</div>
+<p>消費支出については、</p>
+<div class="figure">
+<img src="kakei01_files/figure-html/hist02-1.png" alt="消費支出のヒストグラム" width="480" />
+<p class="caption">
+消費支出のヒストグラム
+</p>
+</div>
+<p>このヒストグラムから、可処分所得、消費支出とも、山（峰）が2つあることが確認できます。これは、それぞれのデータセットに勤労者世帯と無職世帯の2つのグループが存在するためです。</p>
+</div>
+<div id="層別" class="section level3">
+<h3>層別</h3>
+<p>先ほど、データセットには勤労者世帯と無職世帯のグループがあると説明しました。グループ分けを行うと、下の図のように、ヒストグラムが2つ現れます。</p>
+<p>このヒストグラムから、可処分所得、消費支出とも、単峰型の分布が2つ重なっていることが確認できます。</p>
+<ul>
+<li>可処分所得</li>
+</ul>
+<div class="figure">
+<img src="kakei01_files/figure-html/hist03-1.png" alt="層別した可処分所得のヒストグラム" width="480" />
+<p class="caption">
+層別した可処分所得のヒストグラム
+</p>
+</div>
+<ul>
+<li>消費支出</li>
+</ul>
+<div class="figure">
+<img src="kakei01_files/figure-html/hist04-1.png" alt="層別した消費支出のヒストグラム" width="480" />
+<p class="caption">
+層別した消費支出のヒストグラム
+</p>
+</div>
+<p>このように、1つのデータセットに性質の異なるデータが混在している場合は、峰が2つ以上現れることがよくあります。このようなときは、適宜グループ分けを行うと、しばしば峰が1つ（単峰型）の分布が現れます。このような操作を層別といいます。</p>
+<p>また、下の散布図は、先ほどの散布図を勤労者世帯と無職世帯で色分けしたものです。データセットが2つのグループに分かれていることが確認できます。</p>
+<div class="figure">
+<img src="kakei01_files/figure-html/sampu02-1.png" alt="世帯類型でみた可処分所得と消費支出の関係" width="480" />
+<p class="caption">
+世帯類型でみた可処分所得と消費支出の関係
+</p>
+</div>
+</div>
+</div>
+<div id="実証モデルの設定" class="section level2">
+<h2>3.実証モデルの設定</h2>
+<p>検証したい経済理論（「可処分所得の一定割合が消費支出となる」）が決定したところで、分析の手法を検討します。</p>
+<p>計量経済分析では、通常、何らかの関数を仮定します。関数は、一般的に、
+<span class="math display">\[y=f\left( x\right)\]</span> と表されます。
+この式は、左辺（<span class="math inline">\(y\)</span>）が右辺（<span
+class="math inline">\(x\)</span>）によって決定されることを表しています。</p>
+<p>「可処分所得の一定割合が消費支出となる」を関数の形で表すと、直感的には、
+<span class="math display">\[消費支出=f(可処分所得)\]</span>
+と表すことができます。
+この式は、左辺の消費支出が右辺の可処分所得によって決定されることを示しています。</p>
+<p>今後は、この関数を「消費関数」と呼ぶことにします。</p>
+<p>なお、数式を使って表された経済理論は一般的に<strong>経済モデル</strong>と呼ばれます。</p>
+<p>消費関数のモデルにはさまざまなものがありますが、ここでは、単純な一次関数モデルを考えます。
+消費関数を一次関数モデルで表すと、次のようになります。 <span
+class="math display">\[消費支出=a+b可処分所得\]</span>
+この式は、可処分所得が1円増加すると消費支出が<span
+class="math inline">\(b\)</span>円増加すること、また、所得がなくても必ず<span
+class="math inline">\(a\)</span>円が消費されることを示しています。つまり、<span
+class="math inline">\(b\)</span>が限界消費性向、<span
+class="math inline">\(a\)</span>が基礎消費です。</p>
+<p>この式で、<span class="math inline">\(a\)</span>と<span
+class="math inline">\(b\)</span>はパラメータ（変数）と呼ばれます。</p>
+<p>また、左辺の消費支出は<strong>目的変数</strong>（または従属変数、被説明変数）、右辺の可処分所得は<strong>説明変数</strong>（または独立変数）と呼ばれます。</p>
+<p>また、設定した仮説から具体的な関数を仮定することを「モデルを定式化する」といいます。</p>
+</div>
+<div id="回帰分析" class="section level2">
+<h2>4.回帰分析</h2>
+<p>ここでは、消費関数<span
+class="math inline">\(y=a+bx\)</span>のパラメータ（<span
+class="math inline">\(a\)</span>と<span
+class="math inline">\(b\)</span>）を推定し、消費関数を決定します。</p>
+<div id="誤差" class="section level3">
+<h3>誤差</h3>
+<p>ただし、現実の経済では、<span
+class="math inline">\(y=a+bx\)</span>という式がそのまま当てはまることはなく、必ず誤差が含まれます。
+このため、誤差を加えた消費関数は</p>
+<p><span class="math display">\[消費支出=a+b可処分所得+誤差\]</span>
+となります。これを一般式で書くと</p>
+<p><span class="math display">\[y=a+bx+μ\]</span></p>
+<p>となります。
+この式によって、消費額を、法則性によって説明できる部分と誤差の部分に分けることができます。</p>
+</div>
+<div id="回帰直線" class="section level3">
+<h3>回帰直線</h3>
+<p>次に、パラメータの推定を、先ほど描いた散布図との関係で考えてみます。</p>
+<p>パラメータの推定を散布図で考えると、図にプロットした個々のデータの間に一本の直線を描くことを意味しています。直線を引くことを回帰分析（regression
+analysis）といい、引かれた直線を回帰直線といいます。</p>
+<p>また、回帰直線が散布図の<span
+class="math inline">\(y\)</span>軸と交わる点（切片）がパラメータ<span
+class="math inline">\(a\)</span>、直線の傾きがパラメータ<span
+class="math inline">\(b\)</span>になります。</p>
+<p>この回帰分析が、パラメータの推定に最もよく使われる手法です。</p>
+<p>それでは、どのような直線を引けばよいのでしょうか。</p>
+<p>当然、データセットの内容、ここでは所得と消費の関係を的確に表す直線が望ましいということになります。なぜなら、データは現実の経済を表していますから、当てはまりがよい直線であるほど、現実の経済のメカニズムを的確に反映しているといえるからです。</p>
+</div>
+<div id="最小二乗法" class="section level3">
+<h3>最小二乗法</h3>
+<p>「データセットの内容を的確に表す」ための一つの方法として、「それぞれのデータに最も近くなるように」直線を引く、という方法が考えられます。</p>
+<p>なぜなら、回帰直線からそれぞれのデータまでの距離は、推定値と実現値の差、つまり誤差ですから、「それぞれのデータに最も近くなるように」直線を引くと、データセットとの誤差が最も小さくなります。</p>
+<p>このように、誤差を最小にする推定方法を最小二乗法(Least Square
+Method)といいます。</p>
+<p>回帰分析では、この最小二乗法が最もよく用いられます。最小二乗法は、ExcelやRなど、どの統計ソフトでも実行できます。</p>
+<p>Rで回帰分析を行った結果は、つぎのようになります。</p>
+<pre class="r"><code>lm_all &lt;- lm(expenditure ~ income, data = myd)
+summary(lm_all)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = expenditure ~ income, data = myd)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -32920  -6946   -118   7940  35697 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.310e+05  4.815e+03   27.21   &lt;2e-16 ***
+## income      3.167e-01  1.590e-02   19.92   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 12180 on 92 degrees of freedom
+## Multiple R-squared:  0.8117, Adjusted R-squared:  0.8097 
+## F-statistic: 396.7 on 1 and 92 DF,  p-value: &lt; 2.2e-16</code></pre>
+<!---
+勤労者世帯
+
+
+```r
+#lm_w <- lm(expenditure ~ income, data = kak3w)
+#summary(lm_w)
+```
+
+無職世帯
+
+
+```r
+#lm_u <- lm(expenditure ~ income, data = kak3u)
+#summary(lm_u)
+```
+--->
+<p>推定されたパラメータは、出力結果の3段目、「coefficients」の「Estimate」の欄に示されています。このうちInterceptの値がパラメータ<span
+class="math inline">\(a\)</span>、incomeの値がパラメータ<span
+class="math inline">\(b\)</span>です。また、切片の値は基礎消費を、<span
+class="math inline">\(x\)</span>の係数は限界消費性向を表します。</p>
+<p>これをまとめると、次のようになります。</p>
+<ul>
+<li>全世帯
+<ul>
+<li>切片：131,000円</li>
+<li>限界消費性向：0.3167円</li>
+</ul></li>
+<li>勤労者世帯
+<ul>
+<li>切片：122500円</li>
+<li>限界消費性向：0.3375</li>
+</ul></li>
+<li>無職世帯
+<ul>
+<li>切片：100400円</li>
+<li>限界消費性向：0.4613</li>
+</ul></li>
+</ul>
+</div>
+<div id="決定係数" class="section level3">
+<h3>決定係数</h3>
+<p>先ほど、それぞれのデータに最も近くなるように引くと説明しました。</p>
+<p>データに近い回帰直線がひかれていることを、推定の当てはまりがいいといいます。</p>
+<p>当てはまりがいいか否かは、言い換えると、<span
+class="math inline">\(y\)</span>の変動のどれくらいを<span
+class="math inline">\(x\)</span>で説明できるかは、通常、決定係数で判断されます。決定係数は通常<span
+class="math inline">\(R^2\)</span>として表され、0から1までの値をとります。ここでは消費支出の変動のどれくらいを可処分所得で示すことができるかを表しています。</p>
+<p>先ほどの出力結果では、決定係数は「Multiple R-squared」と「Adjusted
+R-squared」の2つが出力されています。日本語では通常「決定係数」、「自由度修正済決定係数」と呼ばれています。単回帰分析の場合は「multiple
+R-squared」の値を使用します。</p>
+<p>今回の出力結果では、「multiple
+R-squared」の値は0.8117となっています。この値は、消費支出の変動の約81.2%を可処分所得の変動で説明できることを表しています。</p>
+<p>また、勤労者世帯の決定係数は0.393、無職世帯の決定係数は0.5055であり、それぞれ、消費支出の変動の約39.3%、50.6%を可処分所得の変動で説明できることを表しています。</p>
+</div>
+<div id="標準誤差" class="section level3">
+<h3>標準誤差</h3>
+<p>上で説明したように、分析の元になるデータには誤差が含まれています。したがって、パラメータの推定値にも誤差が含まれています。</p>
+<p>誤差の大きさを示す値を標準誤差(Standard
+Error)といいます。標準誤差はパラメータの精度に関係しますので、標準誤差の値に注目する必要があります。</p>
+<p>散布図にこれらのパラメータの推定値を使った回帰直線を引くと、下の図のようになります。</p>
+<pre class="r"><code>sampu_lm &lt;- sampu01 + 
+  stat_smooth(method = lm,
+              se = FALSE,
+              fullrange = TRUE)
+plot(sampu_lm)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="kakei01_files/figure-html/sampuz_kaiki-1.png" width="480" /></p>
+<p>この推定結果を式で表すと、以下のようになります。推定した消費関数には、パラメータの下に括弧をつけて標準誤差を示し、さらに決定係数やサンプルサイズを補記することが一般的です。</p>
+<p>勤労者世帯 <span
+class="math display">\[y=122500+0.3375x+μ\]</span></p>
+<p>無職世帯 <span class="math display">\[y=100400+0.4613+μ\]</span></p>
+<p>全世帯</p>
+<p><span class="math display">\[
+\begin{aligned}
+y
+   = &amp; 1.3102443\times 10^{5}
+      &amp; + &amp; 0.32 &amp;  議員経験 \\
+     &amp; (4814.79)
+      &amp;   &amp; (0.02) &amp;
+\end{aligned}
+\]</span></p>
+</div>
+<div id="標準誤差-1" class="section level3">
+<h3>標準誤差</h3>
+<p>パラメータを推定する際には、推定値だけでなく、推定値の誤差（標準誤差）にも注目します。</p>
+<p>標準誤差で注目すべき点は、誤差が、推定値の符号条件が変わるほど大きいかどうかという点です。</p>
+<p>たとえば、消費関数のパラメータ<span
+class="math inline">\(b\)</span>がプラスの値であったとしても、推定誤差が大きければゼロにもマイナスにもなりえます。これでは、可処分所得が消費支出に与える影響を測ることはできません。特に、パラメータ<span
+class="math inline">\(b\)</span>がゼロであれば、可処分所得は消費支出を説明する要因とはみなせなくなります。</p>
+<p>なお、推定結果を式や表で示すときはパラメータ推定値の下に括弧をつけて標準誤差を掲載することが一般的と述べました。その場合、<span
+class="math inline">\(t\)</span>値はパラメータを標準誤差で除すことで簡単に求めることができます。</p>
+</div>
+<div id="仮説検定" class="section level3">
+<h3>仮説検定</h3>
+<p>そこで、推定値と標準誤差を求めた後は、必ず、パラメータの推定値がゼロかどうかについての仮説検定を実施します。</p>
+<div id="t値" class="section level4">
+<h4>t値</h4>
+<p>仮説検定では、<span
+class="math inline">\(t\)</span>値に注目します。<span
+class="math inline">\(t\)</span>値はパラメータを標準誤差で割った値で、値が大きいほど標準誤差が小さいことを示します。</p>
+<p>正確には<span
+class="math inline">\(t\)</span>分布表をもとにサンプルサイズや説明変数の値から判断しますが、多くの場合、<span
+class="math inline">\(t\)</span>値が絶対値で2に近いか、2よりも大きな値であれば、パラメータがゼロであるという帰無仮説は棄却されます。帰無仮説が棄却されたとき、推定値は「統計学的に有意である（statistically
+significant）」といいます。 なぜ<span
+class="math inline">\(t\)</span>値が2に近い値よりも大きければ統計的に有意なパラメータ推定値であると判断できるかは、別の機会に詳しく説明します。</p>
+<p>上の出力結果では、t値は、「t
+value」の欄に示されています。これを見ると、パラメータ<span
+class="math inline">\(a\)</span>（切片）の<span
+class="math inline">\(t\)</span>値は27.21、パラメータ<span
+class="math inline">\(b\)</span>の<span
+class="math inline">\(t\)</span>値は19.92であり、どちらも2より大きくなっていますので、パラメータがゼロであるという帰無仮説は棄却されます。</p>
+</div>
+<div id="p値" class="section level4">
+<h4>p値</h4>
+<p>また、同様のことは有意水準（significance level）あるいは<span
+class="math inline">\(p\)</span>値でも確認できます。<span
+class="math inline">\(p\)</span>値は、直感的にいうと、パラメータの推定値がゼロである確率を示したものです。</p>
+<p>たとえば、<span class="math inline">\(p\)</span>値が<span
+class="math inline">\(0.01\)</span>であれば、推定値がゼロである確率は<span
+class="math inline">\(1\)</span>%となり、非常に小さいと判断できます。計量経済分析では、<span
+class="math inline">\(p\)</span>値が0.05未満や0.10未満など、十分に小さいときに「統計的に有意である」とみなします。</p>
+<p>上の出力結果では、<span
+class="math inline">\(p\)</span>値は<code>Pr(&gt;|t|)</code>の欄に示されています。
+これを見ると、パラメータ<span class="math inline">\(a\)</span>と<span
+class="math inline">\(b\)</span>どちらも<code>&lt;2e-16***</code>となっていて、<span
+class="math inline">\(0\)</span>に近くなっています。このため、「統計学的に有意である」と判断できます。</p>
+<p>また、括弧内に標準誤差でなく<span
+class="math inline">\(t\)</span>値を掲載する場合や、<span
+class="math inline">\(t\)</span>値と<span
+class="math inline">\(p\)</span>値の両方を掲載する場合もあります。いずれの場合も、脚注等に標準誤差、<span
+class="math inline">\(t\)</span>値、<span
+class="math inline">\(p\)</span>値のどれを載せているか示されているので、推定結果を見る際にはその点に注目する必要があります。</p>
+</div>
+</div>
+<div id="重回帰分析" class="section level3">
+<h3>重回帰分析</h3>
+<p>また、経済事象においては、一つの変数が一つの要因だけで決定されるとは限りません。</p>
+<p>例えば、ある家計の食費は、その家計の所得だけでなく、家族の人数にも影響されるかもしれません。その場合、食費が所得だけで決まると考えたり、構成人数だけで決まると考えたりしていては、どちらも必要な説明要因を省いていることになり、正しい分析は行えません。</p>
+<p>このように、説明変数が複数ある場合の回帰分析を重回帰分析（Multiple
+Regression Analysis）といいます。</p>
+<p>これまで説明してきた消費関数の例は説明変数が一つ（可処分所得）の単回帰分析でしたが、重回帰分析では、説明変数一つ一つの<span
+class="math inline">\(t\)</span>値や<span
+class="math inline">\(p\)</span>値をみて、それが統計学的に有意であれば、その変数は被説明変数に影響を与えていると判断し、<span
+class="math inline">\(t\)</span>値や<span
+class="math inline">\(p\)</span>値が有意でなければその変数は影響を与えていないと判断します。</p>
+<p>したがって、仮説検定を行えば、被説明変数に影響を与える要因を特定することができます。</p>
+</div>
+</div>
+<div id="予測" class="section level2">
+<h2>5.予測</h2>
+<p>推定されたパラメータを使うと、被説明変数の予測値（理論値）を算出することができます。</p>
+<p>予測値は、誤差を除いた推定式<span
+class="math inline">\(y=a+bx\)</span>の右辺に、パラメータと任意のデータを代入して求めます。消費関数の例では、推定された「（基礎消費）＋<span
+class="math inline">\(b\)</span>所得」という式の「所得」に任意の値を代入することで、消費支出の予測値を得ることができます。</p>
+<p>観測された実際のデータに基づいた予測値を算出することを「内挿」（Interpolation）といいます。</p>
+<p>例えば、消費関数に神奈川県の勤労者世帯の可処分所得394,329円を代入すると、消費の予測値は
+<span class="math display">\[
+6
+\]</span></p>
+<p><del>170</del>千円となります。実際に観測された消費支出は–160–千円ですから、これは、所得から予測される理論値よりも消費が–10–千円低いということになります。分析にあたっては、この理由についての考察が必要になります。
+また、実際のデータではなく仮想の値を代入して予測値を得ることを「外挿」（Extrapolation）といいます。</p>
+<p>例えば、所得が全国平均よりも10%高い場合における消費支出の理論値を求める場合、所得の全国平均の1.1倍の254千円を所得（パラメータ<span
+class="math inline">\(a\)</span>）に代入することで、192千円という値が消費支出の理論値として得られます。</p>
+<p>こうした予測はシミュレーションとも呼ばれます。推定結果をもとに、何らかの政策効果により所得が今の10%増しになったならば消費がどれだけ増えるかを予測したり、過去に別の政策や行動がとられていたとしたら現在はどのような姿になっているかを予想したりすることができます。</p>
+</div>
+
+<footer>
+  <p>Copyright &copy; 2022 Kanaike </p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

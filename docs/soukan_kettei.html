@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Naozou" />
+
+<meta name="date" content="2022-04-03" />
+
+<title>相関係数と決定係数</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="site_style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My ウェブサイト</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">ホーム</a>
+</li>
+<li>
+  <a href="graph.html">グラフ</a>
+</li>
+<li>
+  <a href="kakei01.html">エコノメ</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">相関係数と決定係数</h1>
+<h4 class="author">Naozou</h4>
+<h4 class="date">2022-04-03</h4>
+
+</div>
+
+
+<div id="相関係数" class="section level2">
+<h2>1.相関係数</h2>
+<div id="相関係数とは" class="section level3">
+<h3>相関係数とは</h3>
+<p>相関係数（correlation
+coefficient）とは、例えば所得と消費、身長と体重、売上と利益、気温とビールの消費量）など、2変数XとYがどの程度の相関関係の強さと方向（正の方向、負の方向）をもつかを表す尺度です。
+Xが増加するにつれてYも増加する関係や、Xが増えるにつれてYが減少する関係を、XとYの間に相関関係がある（XとYの間に相関がある）といいます。
+英語では、次のようにいいます。</p>
+<ul>
+<li><p>X and Y are correlated.</p></li>
+<li><p>X and Y have correlation.</p></li>
+<li><p>There is a correlation between X and Y.</p></li>
+</ul>
+<p>相関係数の値は、XとYの間に、どの程度の直線的（linear）な関係があるかを確認することができます。
+相関係数は通常、Rで表し、その定義式は次のとおりです。</p>
+<p>$ R= \frac { (X - X)(Y -Y)}{$</p>
+</div>
+<div id="相関係数の取りうる範囲正の相関負の相関" class="section level3">
+<h3>相関係数の取りうる範囲、正の相関、負の相関</h3>
+<div id="正の相関" class="section level4">
+<h4>正の相関</h4>
+<p>Xが増えるにつれてＹが増える関係を<strong>正の相関</strong>(positive
+correlation)または<strong>プラスの相関</strong>といいます。<br />
+<br/> 正の相関は、散布図に描くと、右上がりの図になります。</p>
+</div>
+<div id="負の相関" class="section level4">
+<h4>負の相関</h4>
+<p>Xが増えるにつれてＹが減少する関係を<strong>負の相関</strong>(negative
+correlation)または<strong>マイナスの相関</strong>といいます。<br />
+<br/> 負の相関は、散布図に描くと、右下がりの図になります。</p>
+<p>相関係数の取りうる範囲は、<span class="math inline">\(-1\leq R
+\leq1\)</span>であり、Rの値によって以下のような意味を持ちます。 <em>R=1
+<span class="math inline">\(\longrightarrow\)</span>
+正の完全相関(perfect correlation) </em>R&gt;0 <span
+class="math inline">\(\longrightarrow\)</span> 正の相関(positive
+correlation) <em>R=0 <span
+class="math inline">\(\longrightarrow\)</span> 無相関(no correlation)
+</em>R&lt;0 <span class="math inline">\(\longrightarrow\)</span>
+負の相関(negative correlation) *R=-1 <span
+class="math inline">\(\longrightarrow\)</span> 負の完全相関(perfect
+correlation)</p>
+<p>正の相関があるときは、<span
+class="math inline">\(X\)</span>が増加すると<span
+class="math inline">\(Y\)</span>も増加します。いっぽう、負の相関があるときは、<span
+class="math inline">\(X\)</span>が増加すると<span
+class="math inline">\(Y\)</span>は減少します。このような関係をグラフ化したものを散布図(scatter
+diagram)、または相関図(correlation diagram)といいます。<br />
+また、相関理論は、イギリスのゴルトン(F.Galton)によって考案され、後継者のピアソン(K.Pearson)によって、より数学的に精緻なものにされました。このため、相関係数は<em>ピアソンの積率相関係数</em>とも呼ばれます。</p>
+<p><br></p>
+</div>
+</div>
+<div id="相関の強さ" class="section level3">
+<h3>相関の強さ</h3>
+<p>2つの変数XとYの相関関係が強いことを、<strong>相関が高い</strong>といいます。また、XとYの相関関係が弱いことを、<strong>相関が低い</strong>といいます。</p>
+<p>相関の程度を表す尺度は、相関係数です。</p>
+<div id="相関係数-1" class="section level4">
+<h4>相関係数</h4>
+<p>相関係数は、小文字の<span
+class="math inline">\(r\)</span>で表します。
+正の相関があるときは、rは0から1の間のプラスの値（<span
+class="math inline">\(0 \lt r \leq 1\)</span>）になります。
+負の相関があるときは、rは0から-1の間のマイナスの値（<span
+class="math inline">\(-1 \leq r \lt 0\)</span>）になります。
+相関がない（無相関の）ときは、rは0（<span
+class="math inline">\(r=0\)</span>）になります。</p>
+<p>相関係数は、2変数の相関関係が強いほど、値が（正確にはその絶対値が）大きくなります。<br />
+散布図で確認できる相関関係の様子を、測定単位に影響を受けない形で、1つの値として説明したものといえます。
+無相関の場合、相関係数は0、正の相関が強くなるにしたがって1に近づいていきます。相関係数が1であるということは、右上がりの直線上にすべての値が乗るということです。</p>
+<p>どのような場合に「強い相関」「弱い相関」というのでしょうか。明確な基準はないようですし、研究分野によっても異なると思われますが、以下の図のように評価されることが多いようです。</p>
+<p>相関係数｜大きさの評価 —–|—– -0.2|0.2
+-0.4&lt;=r&lt;-0.2|0.2&lt;r&lt;=0.4 -0.7&lt;=r&lt;-0.4|0.4&lt;r&lt;=0.7
+-1.0&lt;=r&lt;-0.7|0.7&lt;r&lt;=1.0</p>
+<p>このように、相関係数を測って、相関の程度を判断することを<strong>相関分析</strong>といいます。</p>
+<p><br></p>
+</div>
+</div>
+<div id="相関関係と因果関係" class="section level3">
+<h3>相関関係と因果関係</h3>
+<p>相関関係の有無と因果関係の有無は、別個の問題です。つまり、相関関係があるからといって、因果関係があるとは限りません。<br />
+したがって、2変数の間に相関関係がある場合、
+<em>XとYの間に因果関係がある相関関係
+</em>XとYの間に因果関係がない相関関係 に分けることができます。</p>
+<p>したがって、相関関係には、因果関係がある場合とない場合があります。つまり、相関関係があるからといって、因果関係があるとは限りません。なお、因果関係とは、原因がはっきり存在し、それによって結果が生じる場合です。ただし、因果関係がない場合であっても、相関の強弱を測るため、相関分析は行われます。
+（以上、白砂 計量経済学）</p>
+</div>
+<div id="単純相関と重相関" class="section level3">
+<h3>単純相関と重相関</h3>
+<p>ここまで、XとYの相関のように、2変数の間の相関関係を見てきました。この、2変数の間の相関関係を<strong>単純相関</strong>（simple
+correlation）といいます。<br />
+これに対して、X、Y、Zなど3つ以上の変数の間の相関関係を<strong>重相関</strong>（multiple
+correlation）といいます。</p>
+<p>これをまとめると、次のようになります。 - 単純相関の程度を表す係数 –
+単純相関係数（simple correlation coefficient）（記号<span
+class="math inline">\(r\)</span>） - 重相関の程度を表す係数 –
+重相関係数（multiple correlation coefficient）（記号<span
+class="math inline">\(R\)</span>）</p>
+</div>
+<div id="散布図による外れ値の発見" class="section level3">
+<h3>散布図による外れ値の発見</h3>
+<p>散布図を描かずにいきなり相関係数を算出する人がいるが、これはやめるべきです。データを手元に揃えたら、まずは散布図を描くべきです。なぜなら、わずかな外れ値の存在が、相関係数の値に大きく影響することがあるためです。このような外れ値の存在は、散布図を描くことによってよく分かります。ぜひ、散布図を描く習慣をつけてください。</p>
+<p><br/></p>
+</div>
+</div>
+<div id="決定係数" class="section level2">
+<h2>決定係数</h2>
+<p>決定係数（coefficient of
+determination）は、観測データから推定された回帰直線の説明力（当てはまりのよさ、適合度（goodness
+of
+fit）ともいいます）を示す尺度で、回帰分析には欠かすことのできない統計量です。</p>
+<p>また、決定係数と相関係数の間には、以下の関係が成立します。
+決定係数＝相関係数の2乗</p>
+<p>決定係数の取りうる範囲は<span class="math inline">\(-1\leq R
+\leq1\)</span>であり、1に近いほど理論値<span class="math inline">\(\hat
+Y\)</span>が観測値Yをよく近似し、モデルの説明力が高いことを表しています。<br />
+例えば<span
+class="math inline">\(R^2\)</span>が0.9であればモデルの説明力は90%であり、<span
+class="math inline">\(R^2\)</span>が0.5であれば、モデルの説明力は50%であると解釈できます。</p>
+<p><br /></p>
+<div id="決定係数の意味合い" class="section level3">
+<h3>決定係数の意味合い</h3>
+<p>（重）相関係数を2乗したものを決定係数といいます。Rでは「Multiple
+R-Squared」の値として表されています。
+決定係数は、「独立変数が従属変数（の分散）をどの程度説明できるか」という説明力を意味しており、例えば決定係数が0.5であれば、50%を説明できるということです。</p>
+<p><br></p>
+</div>
+<div id="平均値からの偏差の変動" class="section level3">
+<h3>平均値からの偏差の変動</h3>
+<p>回帰直線のあてはまりのよさの問題とは、<span
+class="math inline">\(Y_i\)</span>の変動をどれだけ<span
+class="math inline">\(\hat Y_i\)</span>が説明しているかの問題です。
+そこで、<span class="math inline">\(Y_i\)</span>の平均値<span
+class="math inline">\(\bar Y\)</span>からの偏差である<span
+class="math inline">\(Y_i-\bar Y\)</span>の変動の大きさを考えます。</p>
+<p><span class="math display">\[Y_i - \bar Y＝\hat Y_i ＋ \hat u_i -
+\bar Y = (\hat Y_i - \bar Y) + \hat u_i　(i=1,2,…,n)\]</span></p>
+<p>このようにまとめると、最右辺のカッコの中は<span
+class="math inline">\(Y_i\)</span>の変動のうち回帰直線の理論値<span
+class="math inline">\(\hat Y_i\)</span>で説明された部分にあたり、</p>
+</div>
+<div id="直感的な説明" class="section level3">
+<h3>直感的な説明</h3>
+<p>推定式の当てはまりのよさを示す尺度として、決定係数(coefficient of
+determination)があります。
+決定係数は0から1の範囲の値をとり、1に近いほど誤差が小さく、推定の当てはまりがいいことを意味します。
+例えば、決定係数○は、消費の変動の37%が所得によって説明されると解釈します。
+ただし、サンプルサイズが小さいとき、あるいは説明変数が多いときには決定係数は大きくなるという傾向がありますので、注意が必要です。</p>
+<p>例えば、サンプルサイズが2である場合、2点を通る直線は誤差なく描けるため、決定係数は1になります。逆に、サンプルサイズが多いほど誤差が多く含まれるので、決定係数は小さくなる傾向があります。
+また、説明変数が多くなると、さまざまな要因で被説明変数を説明できるようになりますので、決定係数は大きくなる傾向があります。</p>
+<p>また、自由度が大きくなるほど決定係数は小さくなるという特性もあります。
+自由度とは、サンプルサイズを説明変数の値で引いたものと定義されます。例では、サンプルサイズが94、説明変数の数が1ですので、自由度は94-1=93となります。同じくサンプルサイズが94、説明変数の数が2であれば、自由度は94-2=92となります。
+決定係数を自由度の大きさに左右されないように修正したものを自由度修正済み決定係数（adjusted
+degrees of freedom coefficient of
+determination）であり、通常、推定式の当てはまり具合の判断には、決定係数ではなく、自由度修正済み決定係数を用います。</p>
+</div>
+<div id="回帰モデルの説明力" class="section level3">
+<h3>回帰モデルの説明力</h3>
+<p><br /></p>
+<p>回帰直線<span class="math inline">\(\hat Y = \hat \alpha + \hat \beta
++ X\)</span>の当てはまり具合について考えます。<br />
+具体的には、ある回帰直線がどの程度当てはまっているかを示す指標を作ることを考えます。</p>
+<p>実績値は、(2.20)で示されたように、以下のように理論値と残差の和として表すことができます。</p>
+<p><span class="math display">\[Y_i=\hat Y_i+\hat u_i=\hat \alpha+\hat
+\beta X_i+\hat u_i　 (i=1,2,...,n)\]</span> <br /></p>
+<p>回帰直線のあてはまりのよさの問題とは、<span
+class="math inline">\(Y_i\)</span>の変動をどれだけ<span
+class="math inline">\(\hat
+Y_i\)</span>が説明しているかの問題です。<br />
+そこで、一般的には、<span
+class="math inline">\(Y_i\)</span>の平均値である<span
+class="math inline">\(\bar Y\)</span>からの偏差、つまり<span
+class="math inline">\(Y_i - \bar
+Y\)</span>の変動の大きさを考えます。</p>
+<p>上で示された関係の両辺から<span class="math inline">\(\bar Y\)</span>
+を引くと、次の式が導かれます。</p>
+<p><span class="math display">\[
+Y_i - \bar Y = \hat Y_i + \hat u_i - \bar Y = ( \hat Y_i - \bar Y ) +
+\hat u_i　(i=1,2,...,n)
+\]</span></p>
+<p>このようにまとめると、最右辺のカッコの中は<span
+class="math inline">\(_i\)</span>の変動のうち回帰直線の理論値<span
+class="math inline">\(\hat
+Y_i\)</span>で説明された部分にあたり、残差<span
+class="math inline">\(\hat
+u_i\)</span>は理論値で説明されなかった部分と解釈できます。<br />
+ただし、この式は第<span
+class="math inline">\(i\)</span>番目のデータについてのみの解釈ですから、データ全体についてのあてはまりを考える必要があります。</p>
+<p>そこで、まずは残差<span
+class="math inline">\(u_i\)</span>の性質について考える必要があります。</p>
+<p><br /> <br /></p>
+</div>
+<div id="残差の性質" class="section level3">
+<h3>残差の性質</h3>
+<p>回帰直線の残差<span class="math inline">\(\hat
+u_i\)</span>は、次の性質を持っています。</p>
+<p><br /></p>
+<ul>
+<li><strong>残差の総和はゼロになる</strong></li>
+</ul>
+<p>つまり、 <span class="math display">\[\sum \hat u_i=0\]</span>
+となります。<br />
+これは、(2.20から）<span class="math inline">\(\hat u_i = Y_i - \hat
+\alpha - \hat \beta
+X_i\)</span>であることに注意すれば、(2.15式から）導くことができます。</p>
+<p><br /></p>
+<ul>
+<li><strong>説明変数<span class="math inline">\(X_i\)</span>と残差<span
+class="math inline">\(\hat u_i\)</span>の積和がゼロになる </strong></li>
+</ul>
+<p>つまり、 <span class="math display">\[
+\sum X_i \hat u_i=0
+\]</span> となります。<br />
+これは、<span class="math inline">\(\hat u_i = Y_i - \hat \alpha - \hat
+\beta X_i\)</span>ですので、2.15の第2式から導くことができます。<br />
+この性質を数学的に表現すると、<strong>説明変数 </strong> <span
+class="math inline">\(X_i\)</span> <strong>と残差</strong> <span
+class="math inline">\(\hat u_i\)</span>
+<strong>は直交している</strong>といいます。また、相関分析の概念を用いると、<span
+class="math inline">\(X_i\)</span>と<span
+class="math inline">\(u_i\)</span>の相関係数が0であることを意味します。逆に、<span
+class="math inline">\(\hat \alpha\)</span>と<span
+class="math inline">\(\hat \beta\)</span>は<span
+class="math inline">\(\sum \hat u_i=0\)</span>と<span
+class="math inline">\(\sum X_i \hat
+u_i=0\)</span>を満たすように求められたものと考えることもできます。</p>
+<p><br /></p>
+<ul>
+<li><strong>回帰直線の理論値<span class="math inline">\(\hat
+Y_i\)</span>と残差<span class="math inline">\(\hat
+u_i\)</span>の積和がゼロになる</strong></li>
+</ul>
+<p>つまり、 <span class="math display">\[
+\sum \hat Y_i \hat u_i=0
+\]</span> となります。</p>
+<p><span class="math display">\[
+\sum\left( Y_{i}-\overline{Y}\right) ^{2}=\sum\left(
+hatY_{i}-\overline{Y}\right) ^{2+\hat}=
+\]</span></p>
+</div>
+</div>
+
+<footer>
+  <p>Copyright &copy; 2022 Kanaike </p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
